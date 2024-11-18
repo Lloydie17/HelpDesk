@@ -19,9 +19,7 @@ namespace ASI.Basecode.Data.Repositories
 
         public IQueryable<User> GetUsers()
         {
-            return this.GetDbSet<User>()
-                        .Where(u => u.IsActive)
-                        .Include(u => u.Team);
+            return this.GetDbSet<User>().Where(u => u.IsActive);
         }
 
         public bool UserExists(string userId)

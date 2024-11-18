@@ -118,7 +118,7 @@ namespace ASI.Basecode.WebApp.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult Register(UserViewModel model)
+        public IActionResult Register(Services.ServiceModels.UserViewModel model)
         {
             try
             {
@@ -148,6 +148,9 @@ namespace ASI.Basecode.WebApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> SignOutUser()
         {
+            _httpContextAccessor.HttpContext.Session.Remove("Theme");
+
+
             await this._signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account");
         }

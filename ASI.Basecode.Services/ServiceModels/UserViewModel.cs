@@ -26,5 +26,7 @@ namespace ASI.Basecode.Services.ServiceModels
         public string Role { get; set; }
 
         public bool IsActive { get; set; } = true;
+
+        public string TeamName { get; set; }
     }
 }

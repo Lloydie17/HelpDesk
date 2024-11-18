@@ -60,5 +60,10 @@ namespace ASI.Basecode.Data.Repositories
         {
             return _dbContext.Teams.ToList();
         }
+
+        public IEnumerable<Team> GetAllTeams()
+        {
+            return this.GetDbSet<Team>();
+        }
     }
 }

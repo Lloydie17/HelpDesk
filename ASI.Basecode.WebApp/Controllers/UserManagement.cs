@@ -1,5 +1,6 @@
 ﻿using ASI.Basecode.Data.Models;
 using ASI.Basecode.Services.Interfaces;
+using ASI.Basecode.WebApp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -33,7 +34,13 @@ namespace ASI.Basecode.WebApp.Controllers
 
             var users = _userService.GetUsers().Where(u => u.IsActive);
 
-            Console.WriteLine($"Logged-in user role: {userRole}");
+
+            // Fetch the team names
+            var result = _teamService.GetTeams();
+            var teams = result.Item2;
+
+            // Prepare SelectLists for team
+            ViewBag.Teams = new SelectList(teams, "TeamId", "TeamName");
 
             if (userRole == "Admin")
             {
@@ -47,17 +54,12 @@ namespace ASI.Basecode.WebApp.Controllers
         // GET: UserManagement/Create
         public IActionResult Create()
         {
-            // Fetch teams for dropdown
-            (bool result, IEnumerable<Team> teams) = _teamService.GetTeams();
+            // Fetch the team names
+            var result = _teamService.GetTeams();
+            var teams = result.Item2;
 
-            if (result)
-            {
-                ViewBag.Teams = new SelectList(teams, "TeamId", "TeamName");
-            }
-            else
-            {
-                ViewBag.Teams = new SelectList(new List<Team>(), "TeamId", "TeamName");
-            }
+            // Prepare SelectLists for team
+            ViewBag.Teams = new SelectList(teams, "TeamId", "TeamName");
 
             return View();
         }
@@ -66,25 +68,12 @@ namespace ASI.Basecode.WebApp.Controllers
         [HttpPost]
         public IActionResult Create(User user)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                // Fetch teams for dropdown
-                (bool result, IEnumerable<Team> teams) = _teamService.GetTeams();
-
-                if (result)
-                {
-                    ViewBag.Teams = new SelectList(teams, "TeamId", "TeamName");
-                }
-                else
-                {
-                    ViewBag.Teams = new SelectList(new List<Team>(), "TeamId", "TeamName");
-                }
-
-                return View(user);
+                _userService.AddUser(user);
+                return RedirectToAction("Index");
             }
-
-            _userService.AddUser(user);
-            return RedirectToAction("Index");
+            return View(user);
         }
 
         // POST: UserManagement/Edit
@@ -94,21 +83,8 @@ namespace ASI.Basecode.WebApp.Controllers
             if (user != null)
             {
                 _userService.UpdateUser(user);
-                TempData["SuccessMessage"] = "User has been edited";
+                TempData["SuccessMessage"] = "User has been updated";
             }
-
-            // Fetch teams for dropdown
-            (bool result, IEnumerable<Team> teams) = _teamService.GetTeams();
-
-            if (result)
-            {
-                ViewBag.Teams = new SelectList(teams, "TeamId", "TeamName");
-            }
-            else
-            {
-                ViewBag.Teams = new SelectList(new List<Team>(), "TeamId", "TeamName");
-            }
-
             return RedirectToAction("Index");
         }
 

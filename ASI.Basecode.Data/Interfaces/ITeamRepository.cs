@@ -10,6 +10,7 @@ namespace ASI.Basecode.Data.Interfaces
     public interface ITeamRepository
     {
         public IEnumerable<Team> GetTeams();
+        public IEnumerable<Team> GetAllTeams();
         public void AddTeam(Team team);
         public Team GetTeamById(int? id);
         public void UpdateTeam(Team team);

@@ -6,6 +6,7 @@ using ASI.Basecode.Services.ServiceModels;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using static ASI.Basecode.Resources.Constants.Enums;

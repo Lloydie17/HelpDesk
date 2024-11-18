@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASI.Basecode.Data.Migrations
 {
     [DbContext(typeof(AsiBasecodeDBContext))]
-    [Migration("20241117154604_AddTeam")]
-    partial class AddTeam
+    [Migration("20241118100823_NewTeam")]
+    partial class NewTeam
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,13 +32,22 @@ namespace ASI.Basecode.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TeamId"), 1L, 1);
 
+                    b.Property<string>("Company")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TeamLeader")
+                    b.Property<string>("Manager")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TeamName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Tier")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

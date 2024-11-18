@@ -23,7 +23,7 @@ namespace ASI.Basecode.Services.Services
         {
             var team = _teamRepository.GetTeamById(id);
 
-            return team != null ? team.TeamName : "Unknown";
+            return team?.TeamName ?? "Unknown";
         }
 
         public (bool, IEnumerable<Team>) GetTeams()
@@ -35,6 +35,12 @@ namespace ASI.Basecode.Services.Services
                 return (true, teams);
             }
             return (false, null);
+        }
+
+        public List<Team> GetAllTeams()
+        {
+            var teams = _teamRepository.GetAllTeams().ToList();
+            return teams;
         }
 
         public Team GetTeamById(int id)
@@ -49,7 +55,9 @@ namespace ASI.Basecode.Services.Services
                 var newTeam = new Team
                 {
                     TeamName = team.TeamName,
-                    TeamLeader = team.TeamLeader,
+                    Company = team.Company,
+                    Tier = team.Tier,
+                    Manager = team.Manager,
                     CreatedTime = DateTime.Now,
                     UpdatedTime = DateTime.Now
                 };
@@ -72,7 +80,9 @@ namespace ASI.Basecode.Services.Services
             }
 
             existingTeam.TeamName = team.TeamName;
-            existingTeam.TeamLeader = team.TeamLeader;
+            existingTeam.Company = team.Company;
+            existingTeam.Tier = team.Tier;
+            existingTeam.Manager = team.Manager;
             existingTeam.UpdatedTime = DateTime.Now;
 
             _teamRepository.UpdateTeam(existingTeam);
